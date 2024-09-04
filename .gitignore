@@ -1,0 +1,38 @@
+# Python
+*.pyc
+*~
+__pycache__
+
+# Env
+myvenv/
+venv/
+
+# Database
+db.sqlite3
+
+# Ignore static and media folder
+app/static/
+app/media/
+
+# macOS
+._*
+.DS_Store
+.fseventsd
+.Spotlight-V100
+
+# Windows
+Thumbs.db*
+ehthumbs*.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# Visual Studio
+.vscode/
+.history/
+*.code-workspace
+
+# Tests
+.coverage
+htmlcov/
+tests.log
+tests_tree.txt
