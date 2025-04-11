@@ -1,11 +1,372 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Manage | Client Personnel Requests</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    
+    <div class="container">
+        <!-- Header with back button -->
+        <header>
+            <a href="#" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h1>Manage | Client Personnel Requests</h1>
+        </header>
+
+        <!-- Filter section -->
+        <div class="filter-section">
+            <div class="date-range">
+                <input type="date" value="2025-01-11" class="date-input">
+                <span>to</span>
+                <input type="date" value="2025-01-11" class="date-input">
+                <button class="search-button">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Search..." class="search-input">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+            <button class="share-form-button">SHARE FORM</button>
+        </div>
+
+        <!-- Table section -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date of Request</th>
+                        <th>Company</th>
+                        <th>Requested By</th>
+                        <th>Position Open for Hiring</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>01/10/2025</td>
+                        <td>ABC Corporation</td>
+                        <td>John Smith</td>
+                        <td>Senior Software Engineer</td>
+                        <td class="status-cell">
+                            <span class="status-badge pending">Pending</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>01/09/2025</td>
+                        <td>XYZ Industries</td>
+                        <td>Sarah Johnson</td>
+                        <td>HR Manager</td>
+                        <td class="status-cell">
+                            <span class="status-badge approved">Approved</span>
+                            <span class="status-date">01/09/2025</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>01/08/2025</td>
+                        <td>Tech Solutions Inc.</td>
+                        <td>Michael Brown</td>
+                        <td>Project Manager</td>
+                        <td class="status-cell">
+                            <span class="status-badge disapproved">Disapproved</span>
+                            <span class="status-date">01/08/2025</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- No data message -->
+            <div class="no-data" style="display: none;">
+                <p>There's no data yet.</p>
+                <p>Please share this form link to client for their request.</p>
+                <button class="share-form-button-secondary">SHARE FORM</button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="table-footer">
+            <div class="total-records">
+                Total Record/s: 3
+            </div>
+            <div class="pagination">
+                <span>Records per page</span>
+                <select class="records-select">
+                    <option value="10">10</option>
+                </select>
+                <div class="page-controls">
+                    <button class="page-button" disabled><i class="fas fa-chevron-left"></i></button>
+                    <span class="page-number">1</span>
+                    <button class="page-button" disabled><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Form Modal -->
+    <div id="shareFormModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Share Form Link</h2>
+                <button class="close-button">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h3>Choose an app to share the form link</h3>
+                <div class="share-options">
+                    <a href="#" class="share-option" data-app="gmail">
+                        <div class="icon-circle">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <span>Gmail</span>
+                    </a>
+                    <a href="#" class="share-option" data-app="viber">
+                        <div class="icon-circle">
+                            <i class="fab fa-viber"></i>
+                        </div>
+                        <span>Viber</span>
+                    </a>
+                    <a href="#" class="share-option" data-app="telegram">
+                        <div class="icon-circle">
+                            <i class="fab fa-telegram-plane"></i>
+                        </div>
+                        <span>Telegram</span>
+                    </a>
+                </div>
+                <div class="form-link-container">
+                    <input type="text" id="formLink" value="http://yourwebsite.com/client-personnel-form.html" readonly>
+                    <button id="copyButton" class="copy-button">Copy</button>
+                </div>
+                <button class="close-modal-button">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View/Edit Request Modal -->
+    <div id="viewRequestModal" class="modal">
+        <div class="modal-content request-details-modal">
+            <div class="modal-header">
+                <h2>Client Personnel Request Details</h2>
+                <button class="close-button">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="editRequestForm">
+                    <!-- Form Progress -->
+                    <div class="form-progress">
+                        <div class="progress-step active" data-step="1">
+                            <span class="step-number">1</span>
+                            <span class="step-text">General Information</span>
+                        </div>
+                        <div class="progress-step active" data-step="2">
+                            <span class="step-number">2</span>
+                            <span class="step-text">Hiring Profile</span>
+                        </div>
+                    </div>
+
+                    <!-- Page 1 Content -->
+                    <div class="form-section">
+                        <h2>General Information</h2>
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" value="2025-01-10" class="readonly-input" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Company Name</label>
+                            <input type="text" value="ABC Corporation">
+                        </div>
+                        <div class="form-group">
+                            <label>Requested By</label>
+                            <input type="text" value="John Smith">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" value="yahshua.domughohp@gmail.com">
+                        </div>
+
+                        <h2>Request Details</h2>
+                        <div class="form-group">
+                            <label>Reason for Request</label>
+                            <select>
+                                <option value="additional" selected>Additional Manpower</option>
+                                <option value="replacement">Replacement</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Position Open for Hiring</label>
+                            <input type="text" value="Senior Software Engineer">
+                        </div>
+                        <div class="form-group">
+                            <label>Job Type</label>
+                            <select>
+                                <option value="full-time" selected>Full Time</option>
+                                <option value="part-time">Part Time</option>
+                                <option value="project-based">Project Based</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>No. of Hires Needed</label>
+                            <input type="number" value="2" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label>Date Required</label>
+                            <input type="date" value="2025-02-01">
+                        </div>
+
+                        <h2>Additional Considerations</h2>
+                        <div class="form-group">
+                            <label>Location Details</label>
+                            <textarea>Main Office - Manila</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Is There a Budget for Spare Hire?</label>
+                            <select>
+                                <option value="yes" selected>Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Page 2 Content -->
+                    <div class="form-section">
+                        <h2>Hiring Profile</h2>
+                        <div class="form-group">
+                            <label>Key Roles & Responsibilities</label>
+                            <textarea>- Lead development team
+- Architect software solutions
+- Code review and mentoring</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Experience Requirements</label>
+                            <textarea>5+ years of software development experience
+Strong background in web technologies</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Skills & Traits</label>
+                            <textarea>- JavaScript, React, Node.js
+- Problem-solving skills
+- Team leadership</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Degree & Awards Criteria</label>
+                            <textarea>BS Computer Science or related field
+Certifications in relevant technologies preferred</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Non-Negotiable Requirements</label>
+                            <textarea>- Must be willing to work onsite
+- Strong English communication skills</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Requester's Signature</label>
+                            <img src="path/to/signature.png" alt="Signature" class="signature-image readonly-input">
+                        </div>
+                    </div>
+
+                    <!-- Approval Section -->
+                    <div class="approval-section">
+                        <h2>Approval Status</h2>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="approve" name="approval" value="approve" required>
+                                <label for="approve">Approve</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="disapprove" name="approval" value="disapprove">
+                                <label for="disapprove">Disapprove</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Remarks</label>
+                            <textarea placeholder="Enter your remarks here"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="form-buttons">
+                <button type="button" class="close-modal-button">Close</button>
+                <button type="submit" class="submit-button" form="editRequestForm">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div class="toast-container">
+        <!-- Toasts will be dynamically inserted here -->
+    </div>
+
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+    document.getElementById('editRequestForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        // Get form data
+        const formData = {
+            to_email: document.querySelector('input[type="email"]').value,
+            subject: 'Client Personnel Request Update',
+            template_name: 'email/default.html',
+            context: {
+                message: `Your personnel request has been ${
+                    document.querySelector('input[name="approval"]:checked').value === 'approve' 
+                    ? 'approved' 
+                    : 'disapproved'
+                }.
+                
+                Remarks: ${document.querySelector('textarea[placeholder="Enter your remarks here"]').value || 'No remarks provided'}`
+            }
+        };
+
+        try {
+            const response = await fetch('/api/send-email/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+
+            // Show success or error toast
+            const toastContainer = document.querySelector('.toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${response.ok ? 'success' : 'error'}`;
+            toast.textContent = response.ok ? 'Request updated and email sent successfully!' : `Error: ${data.error}`;
+            
+            toastContainer.appendChild(toast);
+            
+            // Remove toast after 3 seconds
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+
+            if (response.ok) {
+                // Close the modal
+                document.getElementById('viewRequestModal').style.display = 'none';
+                
+                // Optionally refresh the table data
+                // location.reload();
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
+            // Show error toast
+            const toastContainer = document.querySelector('.toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast error';
+            toast.textContent = 'Error sending email. Please try again.';
+            
+            toastContainer.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+    });
+    </script>
 </body>
-</html>
+</html> 

@@ -1,0 +1,202 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Personnel Request Form</title>
+    <link rel="stylesheet" href="{% static 'css/form-styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="form-container">
+        <h1 class="form-title">Client Personnel Request Form</h1>
+        <form id="personnelRequestForm">
+            <!-- Form Progress -->
+            <div class="form-progress">
+                <div class="progress-step active" data-step="1">
+                    <span class="step-number">1</span>
+                    <span class="step-text">General Information</span>
+                </div>
+                <div class="progress-step" data-step="2">
+                    <span class="step-number">2</span>
+                    <span class="step-text">Hiring Profile</span>
+                </div>
+            </div>
+
+            <!-- Page 1 -->
+            <div class="form-page active" id="page1">
+                <h2>General Information</h2>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" id="requestDate" readonly class="readonly-input">
+                </div>
+                <div class="form-group">
+                    <label>Company Name*</label>
+                    <input type="text" required>
+                </div>
+                <div class="form-group">
+                    <label>Requested By*</label>
+                    <input type="text" required>
+                </div>
+                <div class="form-group">
+                    <label>Email*</label>
+                    <input type="email" required>
+                </div>
+
+                <h2>Request Details</h2>
+                <div class="form-group">
+                    <label>Reason for Request*</label>
+                    <select required>
+                        <option value="">Select Reason</option>
+                        <option value="additional">Additional Manpower</option>
+                        <option value="replacement">Replacement</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Position Open for Hiring*</label>
+                    <input type="text" required>
+                </div>
+                <div class="form-group">
+                    <label>Job Type*</label>
+                    <select required id="jobType">
+                        <option value="">Select Job Type</option>
+                        <option value="full-time">Full Time</option>
+                        <option value="part-time">Part Time</option>
+                        <option value="project-based">Project Based</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>No. of Hires Needed*</label>
+                    <input type="number" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label>Date Required*</label>
+                    <input type="date" required>
+                </div>
+
+                <h2>Project-Specific Information</h2>
+                <div class="form-group project-specific" style="display: none;">
+                    <label>Available Project(s) for the Hire</label>
+                    <textarea id="projectDetails"></textarea>
+                </div>
+                <div class="form-group project-duration project-specific" style="display: none;">
+                    <label>Project Duration</label>
+                    <div class="date-range">
+                        <input type="date" placeholder="From" id="projectStart">
+                        <span>to</span>
+                        <input type="date" placeholder="To" id="projectEnd">
+                    </div>
+                </div>
+
+                <h2>Additional Considerations</h2>
+                <div class="form-group">
+                    <label>Location Details</label>
+                    <textarea placeholder="Specify where and why"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Is There a Budget for Spare Hire?*</label>
+                    <select required>
+                        <option value="">Select Option</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+
+                <div class="form-buttons">
+                    <button type="button" class="next-button">Next</button>
+                </div>
+            </div>
+
+            <!-- Page 2 -->
+            <div class="form-page" id="page2">
+                <h2>Hiring Profile</h2>
+                
+                <div class="form-group">
+                    <label>Key Roles & Responsibilities*</label>
+                    <textarea placeholder="Foundation for understanding the position" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Experience Requirements*</label>
+                    <textarea placeholder="Years, Specific Roles, and Rationale" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Skills & Traits*</label>
+                    <textarea placeholder="Requirements and Justification" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Degree & Awards Criteria*</label>
+                    <textarea placeholder="Educational background and importance" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Non-Negotiable Requirements*</label>
+                    <textarea placeholder="Details and Rationale" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Preferred Gender</label>
+                    <select>
+                        <option value="">Select Gender (Optional)</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="either">Either</option>
+                    </select>
+                    <textarea placeholder="Please indicate why (Optional)" class="mt-2"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Preferred Age Range</label>
+                    <div class="age-range">
+                        <div class="number-range">
+                            <input type="number" min="18" max="100" placeholder="From">
+                            <span>to</span>
+                            <input type="number" min="18" max="100" placeholder="To">
+                            <span>years old</span>
+                        </div>
+                        <textarea placeholder="Please indicate why (Optional)" class="mt-2"></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Preferred Civil Status</label>
+                    <select>
+                        <option value="">Select Civil Status (Optional)</option>
+                        <option value="single">Single</option>
+                        <option value="married">Married</option>
+                        <option value="widow">Widow</option>
+                        <option value="separated">Separated</option>
+                    </select>
+                    <textarea placeholder="Please indicate why (Optional)" class="mt-2"></textarea>
+                </div>
+
+                <div class="form-group signature-pad">
+                    <label>Requester's Signature*</label>
+                    <canvas id="signaturePad"></canvas>
+                    <button type="button" class="clear-signature">Clear</button>
+                </div>
+
+                <div class="form-group checkbox">
+                    <input type="checkbox" id="privacyConsent" required>
+                    <label for="privacyConsent">
+                        By continuing, I agree to YAHSHUA HRIS' 
+                        <a href="https://www.yahshuahris.com/terms-of-service" target="_blank" class="policy-link">Terms of Service</a>
+                        and 
+                        <a href="https://www.yahshuahris.com/privacy-notice" target="_blank" class="policy-link">Privacy Notice</a>.
+                    </label>
+                </div>
+
+                <div class="form-buttons">
+                    <button type="button" class="prev-button">Previous</button>
+                    <button type="submit" class="submit-button">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+    <script src="{% static 'js/form-script.js' %}"></script>
+</body>
+</html> 

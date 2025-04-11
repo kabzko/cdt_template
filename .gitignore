@@ -36,3 +36,4 @@ $RECYCLE.BIN/
 htmlcov/
 tests.log
 tests_tree.txt
+.qodo
